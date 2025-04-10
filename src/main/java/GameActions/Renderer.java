@@ -1,16 +1,15 @@
 package GameActions;
 
 public class Renderer {
-    public void render(MapInitializer map) {
+    public void render(Map map) {
         for (int row = 0; row < AdditionalValues.MAP_ROW_SIZE; row++) {
-            String line = "";
+            StringBuilder line = new StringBuilder();
             for (int col = 0; col < AdditionalValues.MAP_COL_SIZE; col++) {
                 Coordinates coordinates = new Coordinates(row, col);
                 if (map.isFill(coordinates)) {
-                    String entityName = map.getEntity(coordinates).nameOnMap;
-                    line += entityName;
+                    line.append(map.getEntity(coordinates).nameOnMap);
                 } else {
-                    line +=  "⬛";
+                    line.append("⬛");
                 }
             }
             System.out.println(line);

@@ -1,33 +1,31 @@
 package GameActions;
 
-import static java.lang.System.*;
-
 public class Actions {
-    private Renderer renderer = new Renderer();
+    private final Renderer renderer = new Renderer();
+    Map map = new Map();
 
     public void initActions() {
-        MapInitializer map = new MapInitializer();
         map.setEntities();
         renderer.render(map);
-        startSession(map);
+        System.out.println("Для симуляции напишите: \"start\"");
+        String inputText = AdditionalValues.scanner.next().toLowerCase();
+        if (inputText.equals(AdditionalValues.START_TEXT)) turnActions(map);
     }
 
-    private void startSession(MapInitializer map) {
-        out.println("Для симуляции хода напишите: \"next\"");
-        turnActions(map);
-    }
-
-    public void turnActions(MapInitializer map) {
+    public void turnActions(Map map) {
         while (!AdditionalValues.isGameEnd) {
-            String inputText = AdditionalValues.scanner.next().toLowerCase();
-            if (inputText.equals("next")) {
-                map.MoveEntities();
-                if (!map.isHerbivoreOnMap()) {
-                    AdditionalValues.isGameEnd = true;
-                }
-                out.println("");
-                renderer.render(map);
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
             }
+            map.moveEntities();
+            if (!map.isHerbivoreExistsOnMap()) {
+                AdditionalValues.isGameEnd = true;
+            }
+            System.out.println();
+            renderer.render(map);
+
         }
     }
 }

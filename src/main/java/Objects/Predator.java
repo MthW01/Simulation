@@ -1,31 +1,26 @@
 package Objects;
 
 import GameActions.Coordinates;
-import GameActions.MapInitializer;
-
-import java.util.ArrayList;
-import java.util.List;
+import GameActions.Map;
 
 public class Predator extends Creature {
-    public Predator(int speed, int healthPoint) {
-        setSpeed(speed);
+    public Predator(int healthPoint) {
         setHealthPoints(healthPoint);
         nameOnMap = "\uD83E\uDD77";
     }
 
     @Override
-    protected boolean isValid(Coordinates coord, MapInitializer map) {
-        return super.isValid(coord, map) &&
+    protected boolean isAvailableCoordinates(Coordinates coord, Map map) {
+        return super.isAvailableCoordinates(coord, map) &&
                 (!map.isFill(coord) || map.getEntity(coord) instanceof Herbivore || map.getEntity(coord) instanceof Grass);
     }
 
     @Override
-    public Coordinates makeMove(Coordinates coordinates, MapInitializer map) {
-        List<Coordinates> currWay = new ArrayList<>();
+    public Coordinates makeMove(Coordinates coordinates, Map map) {
         Coordinates herbivoreCoordinates = map.herbivoreCoordinates();
         if (!coordinates.equals(herbivoreCoordinates)) {
-            currWay = bfs(coordinates, herbivoreCoordinates, map);
+            return getTargetCoordinates(coordinates, herbivoreCoordinates, map);
         }
-        return currWay.get(1);
+        return coordinates;
     }
 }
